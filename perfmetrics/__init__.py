@@ -97,7 +97,7 @@ class Metric(object):
     """
 
     def __init__(self, stat=None, rate=1, method=False,
-                 count=True, timing=True, timing_format='%s.t',
+                 count=True, timing=True, timing_format='%s',
                  random=random.random):  # testing hook
         self.stat = stat
         self.rate = rate
