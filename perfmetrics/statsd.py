@@ -2,7 +2,7 @@
 import logging
 import random
 import socket
-
+import time
 
 class StatsdClient(object):
     """Send packets to statsd.
@@ -16,6 +16,7 @@ class StatsdClient(object):
         family, socktype, proto, _canonname, addr = info[0]
         self.addr = addr
         self.log = logging.getLogger(__name__)
+        self.inactivity = time.clock()
         self.udp_sock = socket.socket(family, socktype, proto)
         self.random = random.random  # Testing hook
         if prefix and not prefix.endswith('.'):
@@ -75,9 +76,20 @@ class StatsdClient(object):
         """
         self.incr(stat, -count, rate=rate, buf=buf, rate_applied=rate_applied)
 
+    def check_inactivity(self):
+        if time.clock() - self.inactivity > 1000 * 2 * 60:
+            try:
+                self.udp_sock.close()
+            except IOError:
+                self.log.exception("Failed to close socket")
+            self.log.info("Renewing upd statsd client socket , since it passed inactivity grace period")
+            self.udp_sock = socket.socket(self.family, self.socktype, self.proto)
+        self.inactivity = time.clock()
+
     def _send(self, data):
         """Send a UDP packet containing a string."""
         try:
+            self.check_inactivity()
             self.udp_sock.sendto(data.encode('ascii'), self.addr)
         except IOError:
             self.log.exception("Failed to send UDP packet")
@@ -86,6 +98,7 @@ class StatsdClient(object):
         """Send a UDP packet containing string lines."""
         try:
             if buf:
+                self.check_inactivity()
                 self.udp_sock.sendto('\n'.join(buf).encode('ascii'), self.addr)
         except IOError:
             self.log.exception("Failed to send UDP packet")

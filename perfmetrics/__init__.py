@@ -2,11 +2,11 @@
 """perfmetrics is a library for sending software performance metrics to statsd.
 """
 
-from perfmetrics.clientstack import ClientStack
-from perfmetrics.clientstack import client_stack
-from perfmetrics.statsd import StatsdClient
-from perfmetrics.statsd import StatsdClientMod
-from perfmetrics.statsd import null_client
+from clientstack import ClientStack
+from clientstack import client_stack
+from statsd import StatsdClient
+from statsd import StatsdClientMod
+from statsd import null_client
 from time import time
 import functools
 import os
