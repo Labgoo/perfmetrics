@@ -77,7 +77,7 @@ class StatsdClient(object):
         self.incr(stat, -count, rate=rate, buf=buf, rate_applied=rate_applied)
 
     def check_inactivity(self):
-        if time.clock() - self.inactivity > 1000 * 2 * 60:
+        if self.udp_sock is None or time.clock() - self.inactivity > 1000 * 2 * 60:
             try:
                 self.udp_sock.close()
             except IOError:
@@ -93,6 +93,7 @@ class StatsdClient(object):
             self.udp_sock.sendto(data.encode('ascii'), self.addr)
         except IOError:
             self.log.exception("Failed to send UDP packet")
+            self.udp_sock = None
 
     def sendbuf(self, buf):
         """Send a UDP packet containing string lines."""
@@ -102,6 +103,7 @@ class StatsdClient(object):
                 self.udp_sock.sendto('\n'.join(buf).encode('ascii'), self.addr)
         except IOError:
             self.log.exception("Failed to send UDP packet")
+            self.udp_sock = None
 
 
 class StatsdClientMod(object):
