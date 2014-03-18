@@ -82,7 +82,7 @@ class StatsdClient(object):
         try:
             self.socket_handler.send(data.encode('ascii'))
         except IOError:
-            self.log.exception("Failed to send UDP packet")
+            self.log.warn("Failed to send UDP packet, restarting socket")
             self.socket_handler.sock = None
 
     def sendbuf(self, buf):
@@ -91,7 +91,7 @@ class StatsdClient(object):
             if buf:
                 self.socket_handler.send('\n'.join(buf).encode('ascii'))
         except IOError:
-            self.log.exception("Failed to send UDP packet")
+            self.log.warn("Failed to send UDP packet, restarting socket")
             self.socket_handler.sock = None
 
 
