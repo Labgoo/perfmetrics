@@ -39,6 +39,8 @@ __all__ = ['metric',
 
 statsd_client_stack = client_stack
 
+def statsd_default():
+    return ClientStack.default
 
 def statsd_client():
     """Return the current StatsdClient for the thread.
