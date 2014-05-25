@@ -81,18 +81,18 @@ class StatsdClient(object):
         """Send a UDP packet containing a string."""
         try:
             self.socket_handler.send(data.encode('ascii'))
-        except Exception:
-            self.log.warning("Failed to send UDP packet, restarting socket")
-            self.socket_handler.sock = None
+        except socket.error, msg:
+            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
+                             msg[1])
 
     def sendbuf(self, buf):
         """Send a UDP packet containing string lines."""
         try:
             if buf:
                 self.socket_handler.send('\n'.join(buf).encode('ascii'))
-        except Exception:
-            self.socket_handler.sock = None
-            self.log.warning("Failed to send UDP packet, restarting socket")
+        except socket.error, msg:
+            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
+                             msg[1])
 
 
 class StatsdClientMod(object):
