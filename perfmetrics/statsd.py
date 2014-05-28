@@ -97,7 +97,7 @@ class StatsdClient(object):
             self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
                              msg[1])
         except OverQuotaError, msg:
-            logging.warn('Received quota error when tried to send metrics : %s', str(msg[0]))
+            logging.warn('Received quota error when tried to send metrics : %s ', str(msg[0]))
 
 
 
