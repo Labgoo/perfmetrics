@@ -85,6 +85,9 @@ class StatsdClient(object):
         except socket.error, msg:
             self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
                              msg[1])
+            if str(msg[0]) == '31':
+                self.socket_handler.sock = None
+                self.log.warning('Restarting socket')
         except OverQuotaError, msg:
             logging.warn('Received quota error when tried to send metrics : %s', str(msg[0]))
 
@@ -96,6 +99,9 @@ class StatsdClient(object):
         except socket.error, msg:
             self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
                              msg[1])
+            if str(msg[0]) == '31':
+                self.socket_handler.sock = None
+                self.log.warning('Restarting socket')
         except OverQuotaError, msg:
             logging.warn('Received quota error when tried to send metrics : %s ', str(msg[0]))
 
