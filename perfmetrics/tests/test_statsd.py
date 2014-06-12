@@ -142,3 +142,8 @@ class TestStatsdClient(unittest.TestCase):
         obj = self._make()
         obj.sendbuf([])
         self.assertEqual(self.sent, [])
+
+    def test_sendbug_with_unicode(self):
+        obj = self._make()
+        obj.sendbuf([u'M\xb7A\xb7C'])
+        self.assertEqual(self.sent, [(b'M?A?C', obj.addr)])
