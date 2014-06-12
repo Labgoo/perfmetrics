@@ -3,8 +3,6 @@ import random
 import socket
 import time
 from logging.handlers import DatagramHandler
-from google.appengine.runtime.apiproxy_errors import OverQuotaError
-
 
 class StatsdClient(object):
     """Send packets to statsd.
@@ -88,8 +86,6 @@ class StatsdClient(object):
             if str(msg[0]) == '31':
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
-        except OverQuotaError, msg:
-            logging.warn('Received quota error when tried to send metrics : %s', str(msg[0]))
 
     def sendbuf(self, buf):
         """Send a UDP packet containing string lines."""
@@ -102,8 +98,6 @@ class StatsdClient(object):
             if str(msg[0]) == '31':
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
-        except OverQuotaError, msg:
-            logging.warn('Received quota error when tried to send metrics : %s ', str(msg[0]))
 
 
 
