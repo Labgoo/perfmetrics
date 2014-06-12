@@ -18,25 +18,29 @@ class TestStatsdClient(unittest.TestCase):
         if patch_socket:
             self.sent = sent = []
 
-            class DummySocket(object):
-                def sendto(self, data, addr):
-                    if error is not None:
-                        raise error
-                    sent.append((data, addr))
+            class DummySocketHandler(object):
+                def __init__(self, addr):
+                    self.addr = addr
 
-            obj.udp_sock = DummySocket()
+                def send(self, data):
+                    if error is not None:
+                        # raise error
+                        return
+                    sent.append((data, self.addr))
+
+            obj.socket_handler = DummySocketHandler(obj.addr)
 
         return obj
 
     def test_ctor_with_defaults(self):
         obj = self._make(patch_socket=False)
-        self.assertIsNotNone(obj.udp_sock)
+        self.assertIsNotNone(obj.socket_handler)
         self.assertIsNotNone(obj.addr)
         self.assertEqual(obj.prefix, '')
 
     def test_ctor_with_options(self):
         obj = self._make(patch_socket=False, prefix='foo')
-        self.assertIsNotNone(obj.udp_sock)
+        self.assertIsNotNone(obj.socket_handler)
         self.assertIsNotNone(obj.addr)
         self.assertEqual(obj.prefix, 'foo.')
 

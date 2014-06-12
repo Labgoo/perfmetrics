@@ -3,7 +3,15 @@ import random
 import socket
 import time
 from logging.handlers import DatagramHandler
-from google.appengine.runtime.apiproxy_errors import OverQuotaError
+
+try:
+    from google.appengine.runtime.apiproxy_errors import ImportError, OverQuotaError
+except ImportError:
+    class ImportError(StandardError):
+        pass
+
+    class OverQuotaError(Exception):
+        pass
 
 
 class StatsdClient(object):
@@ -104,7 +112,6 @@ class StatsdClient(object):
                 self.log.warning('Restarting socket')
         except OverQuotaError, msg:
             logging.warn('Received quota error when tried to send metrics : %s ', str(msg[0]))
-
 
 
 class StatsdClientMod(object):

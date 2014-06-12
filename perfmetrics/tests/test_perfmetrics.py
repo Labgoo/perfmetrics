@@ -40,7 +40,7 @@ class Test_statsd_client_from_uri(unittest.TestCase):
 
     def test_local_uri(self):
         client = self._call('statsd://localhost:8129')
-        self.assertIsNotNone(client.udp_sock)
+        self.assertIsNotNone(client.socket_handler)
 
     def test_unsupported_uri(self):
         with self.assertRaises(ValueError):
@@ -135,7 +135,7 @@ class TestMetric(unittest.TestCase):
 
         self.assertEqual(len(self.timing), 1)
         stat, ms, rate, _buf, rate_applied = self.timing[0]
-        self.assertEqual(stat, __name__ + '.spam.t')
+        self.assertEqual(stat, __name__ + '.spam')
         self.assertGreaterEqual(ms, 0)
         self.assertLess(ms, 10000)
         self.assertEqual(rate, 1)
@@ -175,7 +175,7 @@ class TestMetric(unittest.TestCase):
 
         self.assertEqual(len(self.timing), 1)
         stat, ms, rate, _buf, rate_applied = self.timing[0]
-        self.assertEqual(stat, __name__ + '.Spam.f.t')
+        self.assertEqual(stat, __name__ + '.Spam.f')
         self.assertGreaterEqual(ms, 0)
         self.assertLess(ms, 10000)
         self.assertEqual(rate, 1)
@@ -239,7 +239,7 @@ class TestMetric(unittest.TestCase):
         self.assertEqual(len(self.timing), 1)
 
         stat, ms, rate, buf, rate_applied = self.timing[0]
-        self.assertEqual(stat, __name__ + '.spam.t')
+        self.assertEqual(stat, __name__ + '.spam')
         self.assertGreaterEqual(ms, 0)
         self.assertLess(ms, 10000)
         self.assertEqual(rate, 1)
@@ -317,7 +317,7 @@ class TestMetric(unittest.TestCase):
 
         self.assertEqual(len(self.timing), 1)
         stat, ms, rate, _buf, rate_applied = self.timing[0]
-        self.assertEqual(stat, 'thing-done.t')
+        self.assertEqual(stat, 'thing-done')
         self.assertGreaterEqual(ms, 0)
         self.assertLess(ms, 10000)
         self.assertEqual(rate, 1)
@@ -402,7 +402,7 @@ class TestMetric(unittest.TestCase):
         self.assertEqual(len(self.changes), 0)
         self.assertEqual(len(self.timing), 1)
         stat, ms, rate, _buf, rate_applied = self.timing[0]
-        self.assertEqual(stat, 'thing-done.t')
+        self.assertEqual(stat, 'thing-done')
         self.assertGreaterEqual(ms, 0)
         self.assertLess(ms, 10000)
         self.assertEqual(rate, 1)
