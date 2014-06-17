@@ -4,6 +4,7 @@ import socket
 import time
 from logging.handlers import DatagramHandler
 
+
 class StatsdClient(object):
     """Send packets to statsd.
 
@@ -83,7 +84,7 @@ class StatsdClient(object):
         except socket.error, msg:
             self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
                              msg[1])
-            if str(msg[0]) == '31':
+            if str(msg[0]) == '31' or str(msg[0]) == '32':
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
 
@@ -95,7 +96,7 @@ class StatsdClient(object):
         except socket.error, msg:
             self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
                              msg[1])
-            if str(msg[0]) == '31':
+            if str(msg[0]) == '31' or str(msg[0]) == '32':
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
 
