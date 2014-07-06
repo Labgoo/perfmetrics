@@ -3,6 +3,7 @@ import random
 import socket
 import time
 from logging.handlers import DatagramHandler
+import re
 
 
 class StatsdClient(object):
@@ -82,9 +83,10 @@ class StatsdClient(object):
         try:
             self.socket_handler.send(self._encode(data))
         except socket.error, msg:
-            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
-                             msg[1])
-            if str(msg[0]) == '31' or str(msg[0]) == '32':
+            message = str(msg[0]).strip()
+            match = re.search('broken', str(msg[1]))
+            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', message, str(msg[1]))
+            if message == '31' or message == '32' or match:
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
 
@@ -94,9 +96,10 @@ class StatsdClient(object):
             if buf:
                 self.socket_handler.send(self._encode('\n'.join(buf)))
         except socket.error, msg:
-            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', str(msg[0]),
-                             msg[1])
-            if str(msg[0]) == '31' or str(msg[0]) == '32':
+            code = str(msg[0]).strip()
+            match = re.search('broken', str(msg[1]))
+            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', code, str(msg[1]))
+            if code == '31' or code == '32' or match:
                 self.socket_handler.sock = None
                 self.log.warning('Restarting socket')
 
