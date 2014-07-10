@@ -4,6 +4,7 @@ import socket
 import time
 from logging.handlers import DatagramHandler
 import re
+import errno
 
 
 class StatsdClient(object):
@@ -78,17 +79,20 @@ class StatsdClient(object):
         """
         self.incr(stat, -count, rate=rate, buf=buf, rate_applied=rate_applied)
 
+    def check_exception_and_restart(self, msg):
+        code, message = msg
+        self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', code, message)
+        if code == errno.EPIPE or code == errno.EBADR:
+            self.socket_handler.sock = None
+            self.log.warning('Restarting socket')
+
     def _send(self, data):
         """Send a UDP packet containing a string."""
         try:
             self.socket_handler.send(self._encode(data))
         except socket.error, msg:
-            message = str(msg[0]).strip()
-            match = re.search('broken', str(msg[1]))
-            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', message, str(msg[1]))
-            if message == '31' or message == '32' or match:
-                self.socket_handler.sock = None
-                self.log.warning('Restarting socket')
+            self.check_exception_and_restart(msg)
+
 
     def sendbuf(self, buf):
         """Send a UDP packet containing string lines."""
@@ -96,12 +100,7 @@ class StatsdClient(object):
             if buf:
                 self.socket_handler.send(self._encode('\n'.join(buf)))
         except socket.error, msg:
-            code = str(msg[0]).strip()
-            match = re.search('broken', str(msg[1]))
-            self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', code, str(msg[1]))
-            if code == '31' or code == '32' or match:
-                self.socket_handler.sock = None
-                self.log.warning('Restarting socket')
+            self.check_exception_and_restart(msg)
 
     def _encode(self, data):
         return data.encode('ascii', 'replace')
