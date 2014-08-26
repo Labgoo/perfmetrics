@@ -79,28 +79,31 @@ class StatsdClient(object):
         """
         self.incr(stat, -count, rate=rate, buf=buf, rate_applied=rate_applied)
 
-    def check_exception_and_restart(self, msg):
+    def check_exception_and_restart(self, msg, data):
         code, message = msg
         self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', code, message)
         if code == errno.EPIPE or code == errno.EBADR:
             self.socket_handler.sock = None
             self.log.warning('Restarting socket')
+            self.socket_handler.send(data)
 
     def _send(self, data):
         """Send a UDP packet containing a string."""
+        data = self._encode(data)
         try:
-            self.socket_handler.send(self._encode(data))
-        except socket.error, msg:
-            self.check_exception_and_restart(msg)
+            self.socket_handler.send(data)
+        except socket.error, exception_message:
+            self.check_exception_and_restart(exception_message, data)
 
 
     def sendbuf(self, buf):
         """Send a UDP packet containing string lines."""
+        data = self._encode('\n'.join(buf))
         try:
             if buf:
-                self.socket_handler.send(self._encode('\n'.join(buf)))
-        except socket.error, msg:
-            self.check_exception_and_restart(msg)
+                self.socket_handler.send(data)
+        except socket.error, exception_message:
+            self.check_exception_and_restart(exception_message, data)
 
     def _encode(self, data):
         return data.encode('ascii', 'replace')
