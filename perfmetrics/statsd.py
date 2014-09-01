@@ -82,9 +82,9 @@ class StatsdClient(object):
     def check_exception_and_restart(self, msg, data):
         code, message = msg
         self.log.warning('Failed to send UDP packet, Error Code : %s Message : %s', code, message)
-        if code == errno.EPIPE or code == errno.EBADR:
+        if code == errno.EPIPE or code == errno.EBADF:
             self.socket_handler.sock = None
-            self.log.warning('Restarting socket')
+            self.log.warning('Restarting socket and resending')
             self.socket_handler.send(data)
 
     def _send(self, data):
