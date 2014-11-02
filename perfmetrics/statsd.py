@@ -13,7 +13,7 @@ class StatsdClient(object):
     Derived from statsd.py by Steve Ivy <steveivy@gmail.com>.
     """
 
-    def __init__(self, host='localhost', port=8125, prefix=''):
+    def __init__(self, host='localhost', port=8125, prefix='', unique=False):
         # Resolve the host name early.
         info = socket.getaddrinfo(host, int(port), 0, socket.SOCK_DGRAM)
         family, socktype, proto, _canonname, addr = info[0]
@@ -22,6 +22,7 @@ class StatsdClient(object):
         self.inactivity = time.clock()
         self.socket_handler = DatagramHandler(host, port)
         self.random = random.random  # Testing hook
+        self.unique = unique
         if prefix and not prefix.endswith('.'):
             prefix = prefix + '.'
         self.prefix = prefix
@@ -89,7 +90,11 @@ class StatsdClient(object):
 
     def _send(self, data):
         """Send a UDP packet containing a string."""
-        data = self._encode(data)
+        if self.unique:
+            import random
+
+            hash = "%x" % (random.getrandbits(128) >> 100)
+            data = self._encode(hash + '#' + data)
         try:
             self.socket_handler.send(data)
         except socket.error, exception_message:
