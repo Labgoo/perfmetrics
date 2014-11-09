@@ -90,11 +90,6 @@ class StatsdClient(object):
 
     def _send(self, data):
         """Send a UDP packet containing a string."""
-        if self.unique:
-            import random
-
-            hash = "%x" % (random.getrandbits(128) >> 100)
-            data = self._encode(hash + '#' + data)
         try:
             self.socket_handler.send(data)
         except socket.error, exception_message:
