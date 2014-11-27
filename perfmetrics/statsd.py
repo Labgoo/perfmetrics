@@ -93,7 +93,10 @@ class StatsdClient(object):
         try:
             self.socket_handler.send(data)
         except socket.error, exception_message:
-            self.check_exception_and_restart(exception_message, data)
+            try:
+                self.check_exception_and_restart(exception_message, data)
+            except Exception as ex:
+                logging.error('Could not send %s ', data, exc_info=True)
 
 
     def sendbuf(self, buf):
@@ -103,7 +106,10 @@ class StatsdClient(object):
             if buf:
                 self.socket_handler.send(data)
         except socket.error, exception_message:
-            self.check_exception_and_restart(exception_message, data)
+            try:
+                self.check_exception_and_restart(exception_message, data)
+            except Exception as ex:
+                logging.error('Could not send %s ', data, exc_info=True)
 
     def _encode(self, data):
         return data.encode('ascii', 'replace')
