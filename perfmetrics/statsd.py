@@ -1,10 +1,9 @@
 import logging
 import random
 import socket
-import time
 from logging.handlers import DatagramHandler
-import re
 import errno
+import datetime
 
 
 class StatsdClient(object):
@@ -19,7 +18,7 @@ class StatsdClient(object):
         family, socktype, proto, _canonname, addr = info[0]
         self.addr = addr
         self.log = logging.getLogger(__name__)
-        self.inactivity = time.clock()
+        self.inactivity = datetime.datetime.now()
         self.socket_handler = DatagramHandler(host, port)
         self.random = random.random  # Testing hook
         self.unique = unique
@@ -91,6 +90,8 @@ class StatsdClient(object):
     def _send(self, data):
         """Send a UDP packet containing a string."""
         try:
+            if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
+                self.socket_handler.sock = None
             self.socket_handler.send(data)
         except socket.error, exception_message:
             try:
@@ -104,6 +105,8 @@ class StatsdClient(object):
         data = self._encode('\n'.join(buf))
         try:
             if buf:
+                if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
+                    self.socket_handler.sock = None
                 self.socket_handler.send(data)
         except socket.error, exception_message:
             try:
