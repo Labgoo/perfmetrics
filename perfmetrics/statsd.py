@@ -90,8 +90,8 @@ class StatsdClient(object):
     def _send(self, data):
         """Send a UDP packet containing a string."""
         try:
-            if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
-                self.socket_handler.sock = None
+            # if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
+            # self.socket_handler.sock = None
             self.socket_handler.send(data)
         except socket.error, exception_message:
             try:
@@ -105,8 +105,8 @@ class StatsdClient(object):
         data = self._encode('\n'.join(buf))
         try:
             if buf:
-                if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
-                    self.socket_handler.sock = None
+                # if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
+                # self.socket_handler.sock = None
                 self.socket_handler.send(data)
         except socket.error, exception_message:
             try:
