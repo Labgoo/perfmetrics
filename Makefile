@@ -7,7 +7,7 @@ COVERAGE = python $(shell which coverage)
 
 all: default
 
-default: clean coverage pylint test
+default: clean coverage test
 
 clean:
 	find . -type f -name '*.pyc' -delete
