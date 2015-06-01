@@ -17,3 +17,7 @@ man
 parts
 .idea
 nose2-junit.xml
+pip-selfcheck.json
+nosetests.xml
+.Python
+.eggs
