@@ -10,14 +10,14 @@ if sys.version_info[:2] < (2, 7):
 
 here = os.path.dirname(__file__)
 README = open(os.path.join(here, 'README.rst')).read()
-CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
+# CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 setup(name='perfmetrics',
       version='3.0',
       author='Labgoo',
       author_email='roman@wondermall.com',
       description='Wondermall customized Send performance metrics about Python code to Statsd',
-      long_description=README + '\n\n' + CHANGES,
+      long_description=README, # + '\n\n' + CHANGES,
       # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=["Development Status :: 5 - Production/Stable",
                    "Intended Audience :: Developers",
