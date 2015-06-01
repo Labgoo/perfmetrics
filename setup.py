@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 import os
 import sys
 
-requires = ['setuptools']
+requires = ['setuptools', 'setuptools-lint', 'unittest2', 'coverage', 'nose']
 
 if sys.version_info[:2] < (2, 7):
     requires.append('unittest2')
@@ -31,9 +31,10 @@ setup(name='perfmetrics',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
+      setup_requires=requires,
       tests_require=requires + ['nose'],
       test_suite="nose.collector",
-      install_requires=requires,
+      install_requires=['setuptools'],
       entry_points="""\
       [paste.filter_app_factory]
       statsd = perfmetrics:make_statsd_app
