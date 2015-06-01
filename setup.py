@@ -5,6 +5,16 @@ import sys
 
 requires = ['setuptools', 'setuptools-lint', 'unittest2', 'coverage', 'nose']
 
+def get_build_number():
+    fname = 'build.info'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            build_number = f.read()
+            build_number = re.sub("[^a-z0-9]+","", build_number, flags=re.IGNORECASE)
+            return '.' + build_number
+            
+    return ''
+
 if sys.version_info[:2] < (2, 7):
     requires.append('unittest2')
 
@@ -13,7 +23,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 # CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 setup(name='perfmetrics',
-      version='3.0',
+      version='3.0' + get_build_number(),
       author='Labgoo',
       author_email='roman@wondermall.com',
       description='Wondermall customized Send performance metrics about Python code to Statsd',
