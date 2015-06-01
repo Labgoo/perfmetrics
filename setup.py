@@ -13,10 +13,10 @@ README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 setup(name='perfmetrics',
-      version='2.0',
-      author='Shane Hathaway',
-      author_email='shane@hathawaymix.org',
-      description='Send performance metrics about Python code to Statsd',
+      version='3.0',
+      author='Labgoo',
+      author_email='roman@wondermall.com',
+      description='Wondermall customized Send performance metrics about Python code to Statsd',
       long_description=README + '\n\n' + CHANGES,
       # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=["Development Status :: 5 - Production/Stable",
@@ -26,7 +26,7 @@ setup(name='perfmetrics',
                    "License :: Repoze Public License",
                    "Topic :: System :: Monitoring",
                    ],
-      url="https://github.com/hathawsh/perfmetrics",
+      url="https://github.com/Labgoo/perfmetrics",
       license='BSD-derived (http://www.repoze.org/LICENSE.txt)',
       packages=find_packages(),
       include_package_data=True,
