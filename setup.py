@@ -2,6 +2,7 @@
 from setuptools import setup, find_packages
 import os
 import sys
+import re
 
 requires = ['setuptools', 'setuptools-lint', 'unittest2', 'coverage', 'nose']
 
