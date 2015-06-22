@@ -23,7 +23,7 @@ here = os.path.dirname(__file__)
 README = open(os.path.join(here, 'README.rst')).read()
 # CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-setup(name='perfmetrics',
+setup(name='wondermall-perfmetrics',
       version='3.0' + get_build_number(),
       author='Labgoo',
       author_email='roman@wondermall.com',
