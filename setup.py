@@ -4,7 +4,7 @@ import os
 import sys
 import re
 
-requires = ['setuptools', 'setuptools-lint', 'unittest2', 'coverage', 'nose']
+requires = ['setuptools']
 
 def get_build_number():
     fname = 'build.info'
@@ -42,10 +42,9 @@ setup(name='wondermall-perfmetrics',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,
-      setup_requires=requires,
       tests_require=requires + ['nose'],
       test_suite="nose.collector",
-      install_requires=['setuptools'],
+      install_requires=requires,
       entry_points="""\
       [paste.filter_app_factory]
       statsd = perfmetrics:make_statsd_app
