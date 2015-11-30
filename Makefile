@@ -16,7 +16,7 @@ clean:
 	@rm -rf tmp_test/
 
 test:
-	python -W default setup.py nosetests --with-xunit --with-cov --verbosity=2
+	python -W default setup.py nosetests --with-xunit --verbosity=2
 
 pylint:
 	python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=$(PACKAGE)/
