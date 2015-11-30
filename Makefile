@@ -7,9 +7,10 @@ COVERAGE = python $(shell which coverage)
 
 all: default
 
-default: clean coverage test
+default: clean test
 
 clean:
+	$(COVERAGE) erase
 	find . -type f -name '*.pyc' -delete
 	find . -type f -path '*/__pycache__/*' -delete
 	find . -type d -empty -delete
