@@ -40,8 +40,7 @@ coverage:
 deploy:
 	rm -rf dist/
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py sdist
-	PACKAGE_FILE=$(ls dist | grep perfmetrics)
-	curl -F package=@./dist/$(PACKAGE_FILE) $(FURY_API_URL)
+	curl -F package=@./dist/$(shell ls dist | grep perfmetrics) $(FURY_API_URL)
 
 doc:
 	make -C $(DOC_DIR) html
