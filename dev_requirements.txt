@@ -3,3 +3,4 @@ PyYAML==3.11
 unittest2
 coverage
 nose
+setuptools-lint
