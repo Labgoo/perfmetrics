@@ -4,6 +4,7 @@ DOC_DIR=docs
 
 # Use current python binary instead of system default.
 COVERAGE = python $(shell which coverage)
+PACKAGE_FILE = $(wildcard dist/*.tar.gz)
 
 all: default
 
@@ -40,7 +41,7 @@ coverage:
 deploy:
 	rm -rf dist/
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py sdist
-	curl -F package=@$(wildcard dist/*.tar.gz) $(FURY_API_URL)
+	curl -F package=@$(PACKAGE_FILE) $(FURY_API_URL)
 
 doc:
 	make -C $(DOC_DIR) html
