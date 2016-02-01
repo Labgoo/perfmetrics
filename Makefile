@@ -40,7 +40,6 @@ coverage:
 deploy:
 	rm -rf dist/
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py sdist
-	echo $(PACKAGE_FILE)
 	curl -F package=@dist/`ls -t1 dist/ | grep tar.gz | head -n1` $(FURY_API_URL)
 
 doc:
