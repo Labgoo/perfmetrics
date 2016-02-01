@@ -4,7 +4,7 @@ DOC_DIR=docs
 
 # Use current python binary instead of system default.
 COVERAGE = python $(shell which coverage)
-PACKAGE_FILE = $(wildcard dist/*.tar.gz)
+PACKAGE_FILE = $(wildcard ./dist/*.tar.gz)
 
 all: default
 
