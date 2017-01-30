@@ -93,7 +93,7 @@ class StatsdClient(object):
             # if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
             # self.socket_handler.sock = None
             self.socket_handler.send(data)
-        except socket.error, exception_message:
+        except socket.error as exception_message:
             try:
                 self.check_exception_and_restart(exception_message, data)
             except Exception as ex:
@@ -108,7 +108,7 @@ class StatsdClient(object):
                 # if self.inactivity + datetime.timedelta(minutes=2) < datetime.datetime.now():
                 # self.socket_handler.sock = None
                 self.socket_handler.send(data)
-        except socket.error, exception_message:
+        except socket.error as exception_message:
             try:
                 self.check_exception_and_restart(exception_message, data)
             except Exception as ex:
