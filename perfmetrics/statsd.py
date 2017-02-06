@@ -96,6 +96,9 @@ class StatsdClient(object):
         except socket.error as exception_message:
             try:
                 self.check_exception_and_restart(exception_message, data)
+            except TypeError:
+                data = data.encode('utf-8')
+                self.socket_handler.send(data)
             except Exception as ex:
                 logging.error('Could not send %s ', data, exc_info=True)
 
